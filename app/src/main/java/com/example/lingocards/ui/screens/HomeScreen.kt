@@ -29,9 +29,29 @@ import com.example.lingocards.data.TopicData
 import com.example.lingocards.ui.components.InfoCards
 import com.example.lingocards.ui.components.TopicButtons
 import com.example.lingocards.ui.theme.LingoCardsTheme
+import com.example.lingocards.ui.components.AddCardDialog
+import com.example.lingocards.ui.components.AddTopicDialog
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    ) {
+    var showAddTopicDialog by remember { mutableStateOf(false) }
+    var showAddCardDialog by remember { mutableStateOf(false) }
+    var newTopicName by remember { mutableStateOf("") }
+    var newEnglish by remember { mutableStateOf("") }
+    var newFinnish by remember { mutableStateOf("") }
+
+    // Function to handle "Add Topic" button click
+    fun onAddTopicRequest() {
+        showAddTopicDialog = true
+    }
+
+    // Function to handle "Add Card" button click
+    fun onAddCardRequest(topic: String) {
+        showAddCardDialog = true
+    }
+
     val topics = TopicData.topics
     var selectedTopic by remember { mutableStateOf(topics.firstOrNull() ?: "") }
 
@@ -57,7 +77,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 selectedTopic = selectedTopic,
                 onTopicSelected = { topic ->
                     selectedTopic = topic
-                }
+                },
+                onAddTopicRequest = ::onAddTopicRequest
             )
 
             // Info Cards
@@ -97,10 +118,50 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                             finnishTranslation = card.finnishTranslation.ifEmpty { AppConstants.TRANSLATION_NOT_AVAILABLE }
                         )
                     },
-                    modifier = Modifier.fillMaxSize()
+                    onAddCardRequest = ::onAddCardRequest,
+                    modifier = Modifier.fillMaxSize(),
+                    selectedTopic = selectedTopic
                 )
             }
         }
+    }
+
+    // Add Topic Button Logic
+    if (showAddTopicDialog) {
+        AddTopicDialog(
+            newTopicName = newTopicName,
+            onTopicNameChanged = { newTopicName = it },
+            onSave = {
+                if (newTopicName.isNotBlank()) {
+                    TopicData.topics.add(newTopicName)
+                    showAddTopicDialog = false
+                }
+            },
+            onDismiss = { showAddTopicDialog = false }
+        )
+    }
+
+    // Add Card Button Logic
+    if (showAddCardDialog) {
+        AddCardDialog(
+            selectedTopic = selectedTopic,
+            newEnglish = newEnglish,
+            newFinnish = newFinnish,
+            onEnglishChanged = { newEnglish = it },
+            onFinnishChanged = { newFinnish = it },
+            onSave = {
+                if (newEnglish.isNotBlank() && newFinnish.isNotBlank()) {
+                    TopicData.topicInfoCards[selectedTopic]?.add(
+                        CardData(newEnglish, newFinnish)
+                    )
+                    showAddCardDialog = false
+                }
+            },
+            onDismiss = { showAddCardDialog = false },
+            onTranslate = {
+                // Step 6: Fetch translation via API here
+            }
+        )
     }
 }
 

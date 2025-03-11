@@ -1,38 +1,39 @@
 package com.example.lingocards.ui.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.lingocards.data.CardData
 import com.example.lingocards.ui.theme.LingoCardsTheme
+import kotlin.reflect.KFunction1
 
 @Composable
 fun InfoCards(
     cards: List<CardData>,
+    selectedTopic: String,
+    onAddCardRequest: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val configuration = LocalConfiguration.current
@@ -58,17 +59,19 @@ fun InfoCards(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(0.5f), // Take up 50% of the card's height
+                            .fillMaxHeight(0.45f), // Slightly reduced height to make space for the divider
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
+                        DynamicText(
                             text = card.englishSentence,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface,
-                            textAlign = TextAlign.Center
+                            maxFontSize = 24.sp,
+                            minFontSize = 10.sp
                         )
                     }
 
+                    // Divider
                     HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -81,17 +84,27 @@ fun InfoCards(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .fillMaxHeight(1f), // Take up the remaining 50% of the card's height
+                            .fillMaxHeight(1f), // Take up the remaining height
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
+                        DynamicText(
                             text = card.finnishTranslation.ifEmpty { "Translation not available" },
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface,
-                            textAlign = TextAlign.Center
+                            maxFontSize = 24.sp,
+                            minFontSize = 10.sp
                         )
                     }
                 }
+            }
+        }
+
+        item {
+            IconButton(
+                onClick = { onAddCardRequest(selectedTopic) },
+                modifier = Modifier.padding(end = 8.dp)
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Add Card")
             }
         }
     }
