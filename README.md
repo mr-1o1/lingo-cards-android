@@ -76,7 +76,7 @@ app/src/main/java/com/example/lingocards/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/mr-1o1/lingo-cards-android.git
    cd LingoCards
    ```
 
