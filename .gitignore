@@ -13,3 +13,11 @@
 .externalNativeBuild
 .cxx
 local.properties
+*/.idea/
+**/__pycache__
+**/.kotlin/
+.idea/*
+.idea/gradle.xml
+CODE_STRUCTURE.md
+/.idea
+.idea/gradle.xml
