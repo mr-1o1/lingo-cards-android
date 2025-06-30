@@ -38,9 +38,9 @@ class LingoRepository(
     
     // Translation operations
     suspend fun translateToFinnish(englishText: String): Result<String> = runCatching {
-        val request = TranslationRequest(q = englishText)
+        val request = TranslationRequest(sentence = englishText)
         val response = ApiClient.translationApi.translate(request)
-        response.translatedText
+        response.translated_sentence
     }
     
     // Combined operations

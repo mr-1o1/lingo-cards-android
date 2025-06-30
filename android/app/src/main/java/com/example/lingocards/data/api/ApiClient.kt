@@ -7,7 +7,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
-    private const val BASE_URL = "https://libretranslate.de/"
+    // Update to use local backend server
+    // For Android emulator, use 10.0.2.2 instead of localhost
+    // For physical device, use your computer's IP address
+    private const val BASE_URL = "http://10.0.2.2:8000/"
     
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {

@@ -4,13 +4,13 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 data class TranslationRequest(
-    val q: String,
-    val source: String = "en",
-    val target: String = "fi"
+    val sentence: String,
+    val source_language: String = "en",
+    val target_language: String = "fi"
 )
 
 data class TranslationResponse(
-    val translatedText: String
+    val translated_sentence: String
 )
 
 interface TranslationApi {
